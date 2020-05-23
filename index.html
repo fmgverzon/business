@@ -36,11 +36,11 @@
             </div>
             <div id="map"></div>
             <div id="credits">
-                <p>Github Leaflet Draw Collection Tool &copy;2020, Miko Verzon</p>
+                <p>Github Leaflet Draw Collection Tool &copy;2015, Mike Foster and Raphael Dumas</p>
                 <p>Manila City Bussinesses &copy;2020, Miko Verzon</p>
             </div>
         </div>
-        <div id="dialog" title="Businesses">
+        <div id="dialog" title="Business Details">
             <form>
                 <fieldset style="border: none;">
                     <ul style="list-style-type: none; padding-left: 0px">
@@ -74,7 +74,7 @@
             var config = { //TODO: Change to your username, insert function on Carto, and Carto tablename
                 cartoUsername: "fmgverzon",
                 cartoInsertFunction: "insert_crowd_mapping_data",
-                cartoTablename: "business",
+                cartoTablename: "businesses",
                 mapcenter: [12.85985, 114.03808],
                 drawOptions: {
                     draw: {
@@ -91,7 +91,7 @@
             };
 
             var cartoData = null; //These adds data from Carto using the SQL API, declares variables, and writes the SQL selection query
-            var sqlQuery = "SELECT the_geom, name, note, hear FROM " + config.cartoTablename;
+            var sqlQuery = "SELECT the_geom, business, description, owner FROM " + config.cartoTablename;
             var map = L.map('map', {
                 center: config.mapcenter,
                 zoom: 5
@@ -162,7 +162,7 @@
                     of: "#map"
                 },
                 buttons: {
-                    "Hear.": setData,
+                    "Submit": setData,
                     Cancel: function() {
                         dialog.dialog("close");
                         refreshLayer();
@@ -181,9 +181,9 @@
             });
 
             function setData() {
-      			var enteredNickname = "'" + JSON.stringify(business.value.replace("'", "''")) + "'"
-      			var enteredNote = "'" + JSON.stringify(description.value.replace("'", "''")) + "'"                 
-      			var enteredHear = "'" + JSON.stringify(owner.value.replace("'", "''")) + "'";                      
+      			var enteredBusiness = "'" + JSON.stringify(business.value.replace("'", "''")) + "'"
+      			var enteredDescription = "'" + JSON.stringify(description.value.replace("'", "''")) + "'"                 
+      			var enteredOwner = "'" + JSON.stringify(owner.value.replace("'", "''")) + "'";                      
 
                 drawnItems.eachLayer(function(layer) {
                     var drawing = "'" + JSON.stringify(layer.toGeoJSON().geometry) + "'", //Converts the drawing to a GeoJSON
@@ -211,9 +211,9 @@
                         }
                     });
                     var newData = layer.toGeoJSON();
-                    newData.properties.name = business.value;
-                    newData.properties.note = description.value;
-                    newData.properties.hear = owner.value;                    
+                    newData.properties.business = business.value;
+                    newData.properties.description = description.value;
+                    newData.properties.owner = owner.value;                    
                     cartoData.addData(newData);
                 });
 

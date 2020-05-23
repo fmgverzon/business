@@ -12,7 +12,7 @@ AS $$
 DECLARE 
     _the_geom GEOMETRY;
 	--The name of your table in cartoDB
-	_the_table TEXT := 'business';
+	_the_table TEXT := 'businesses';
 BEGIN
     --Convert the GeoJSON to a geometry type for insertion. 
     _the_geom := ST_SetSRID(ST_GeomFromGeoJSON(_geojson),4326); 
